@@ -26,9 +26,20 @@ A large home-electronics company wants to enter the home-automation market with 
      ecosystems (voice assistants, Matter); and the business model (one-off purchase vs.
      subscription), which changes how much cloud cost is acceptable. -->
 
-| Question | Why it matters | My assumption |
-| --- | --- | --- |
-|  |  |  |
+There's no client to answer these, so each question comes with the assumption I designed around.
+
+| # | Question | Why it matters | My assumption |
+| --- | --- | --- | --- |
+| 1 | Can we ask customers to change their home network settings (for example, open ports on their router), or must the devices work with a standard home router out of the box? | It decides how commands reach a device inside a home network from the Internet. | No network changes. Customers won't open their home network to the Internet, so devices only make outgoing connections, and commands are pushed to them over those connections. |
+| 2 | How up to date do the opt-in statistics for the company need to be? | It decides whether statistics are computed in real time or in periodic batches, which changes cost and complexity. | A delay of a few hours is fine. Statistics are computed in batches, not in real time. |
+| 3 | How many customers and devices do you expect, and how many will use remote access at the same time? | It drives capacity, load balancing and failover. | Thousands of units in the first three years, as the brief says, but the design should grow to hundreds of thousands of homes without a rewrite. |
+| 4 | What availability do you expect for remote access? | It decides how much redundancy and backup the platform needs. | 99.9% for remote access, about 9 hours of downtime a year. That's enough because core functions keep working locally when the cloud is down (see question 6). |
+| 5 | How quickly must a device react to a command? Within a second, or is a short delay acceptable? | It decides how the platform and the devices communicate. | Commands like locking a door or switching a light should take effect within a couple of seconds. |
+| 6 | Must locks, lights and customers' rules keep working when the home Internet connection or our cloud platform is down? | It decides what runs locally in the home and what runs in the cloud. | Yes. Core functions keep working locally. Only remote access needs the Internet. |
+| 7 | Which security standards and certifications must the locks and cameras meet? | Door locks and cameras are high-risk devices, and the EU has cybersecurity rules for connected devices. | Security is a top priority, and the devices must meet EU requirements for connected devices. |
+| 8 | Where is camera video stored, for how long, and who pays for the storage? | Video is by far the most expensive data in the system, in both bandwidth and storage. | Live view is included. Cloud recording is an optional subscription with limited retention. |
+| 9 | How complex are the "programs" customers create? Simple rules, or something closer to scripting? | It decides whether we need a simple rules engine or a much larger automation platform. | Simple rules and scenes, created in the app (for example, "at sunset, turn on the lights"). |
+| 10 | In which countries will the product be sold, and are there rules about where customer data must be stored? | "International" brings GDPR and similar laws, which affect where servers run and how the opt-in statistics are anonymized. | Data from EU customers stays in the EU, and the statistics only use anonymized data. |
 
 ## 3. Architecture characteristics
 
