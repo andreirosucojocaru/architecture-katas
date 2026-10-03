@@ -43,17 +43,22 @@ There's no client to answer these, so each question comes with the assumption I 
 
 ## 3. Architecture characteristics
 
-<!-- Candidates to choose from: availability, security, privacy, interoperability,
-     extensibility, scalability, elasticity, reliability when offline, deployability
-     (over-the-air updates), cost. Pick the top three and say why. -->
+The three characteristics that drive this design, in order:
 
-| Characteristic | Why it matters here |
-| --- | --- |
-|  |  |
-|  |  |
-|  |  |
+| # | Characteristic | Why it matters here |
+| --- | --- | --- |
+| 1 | **Security** | The system controls door locks and cameras, so an attack doesn't just leak data: it can open someone's front door or let a stranger watch inside their home. Customers must never reach each other's devices, devices must prove who they are before joining the system, and firmware updates must come only from the company. |
+| 2 | **Fault tolerance** | A front door must open and the lights must turn on even when the home Internet connection or the cloud platform is down. Core functions and customers' rules keep running locally, and only remote access depends on the cloud (questions 4 and 6). |
+| 3 | **Extensibility** | The product is sold as separate modules, and the brief expects new, "unspecified" behavior in the future. Adding a new device type should mean adding a module, not redesigning the system or the protocol. |
 
 **Also considered:**
+
+| Characteristic | Why it didn't make the top three |
+| --- | --- |
+| Responsiveness | Locks and lights must react within a couple of seconds (question 5), but since core functions run locally in the home, the most time-critical commands don't depend on the cloud. It shapes the design of remote commands rather than driving the whole architecture. |
+| Availability | Every customer-facing system needs it. Because core functions keep working locally, the cloud only needs 99.9% for remote access (question 4). Fault tolerance in the home covers the part that really matters. |
+| Interoperability | The protocol is ours and the hardware team implements it, so working with other companies' devices isn't required. Supporting our own future device types is covered by extensibility. |
+| Scalability | Sales start in the thousands of units (question 3), so this isn't the first concern. The design should still grow to hundreds of thousands of homes without a rewrite. Handling many requests at the same time is part of this, at the implementation level. |
 
 ## 4. Components
 
